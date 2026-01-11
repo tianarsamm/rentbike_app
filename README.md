@@ -1,132 +1,326 @@
-RentRide — Aplikasi Manajemen Sewa Motor
+# RentRide — Aplikasi Manajemen Sewa Motor
 
 Developed by:
 Syrilus Christiano Putra Arsam
 (2301020019)
 
-Deskripsi Proyek
+---
 
-RentRide adalah aplikasi mobile sederhana berbasis React Native (Expo) yang dirancang untuk membantu pengguna dalam mengelola data motor sewaan.
-Aplikasi ini memungkinkan pengguna untuk menambah, melihat, dan menyimpan data motor yang disewakan menggunakan AsyncStorage sebagai media penyimpanan lokal.
+## 📱 Deskripsi Aplikasi
 
-Aplikasi ini dikembangkan dengan Expo Router untuk sistem navigasi antar halaman dan memiliki tampilan antarmuka yang sederhana dan bersih.
+RentRide adalah aplikasi mobile manajemen sewa motor berbasis React Native (Expo) yang dikembangkan untuk membantu pengguna dalam proses pemesanan dan pengelolaan rental motor. Aplikasi ini menggunakan **Supabase** sebagai backend database dan **Zustand** untuk state management, dengan dukungan **real-time updates** menggunakan Supabase subscriptions.
+
+Aplikasi ini dikembangkan dengan **Expo Router** untuk sistem navigasi berbasis file yang intuitif dan modern.
 
 ---
 
-Fitur Utama
+## 🏗️ Arsitektur Aplikasi
 
-Tambah Data Motor (Create)
-Pengguna dapat menambahkan motor baru lengkap dengan nama, jenis, dan harga sewa per hari.
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        FRONTEND                             │
+│  ┌───────────┐  ┌───────────┐  ┌───────────┐               │
+│  │  Expo     │  │ Zustand   │  │ Async     │               │
+│  │  Router   │  │ Store     │  │ Storage   │               │
+│  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘               │
+│        │              │              │                      │
+│  ┌─────┴──────────────┴──────────────┴──────────────┐       │
+│  │              React Native Components              │       │
+│  └───────────────────────────────────────────────────┘       │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│                        BACKEND                              │
+│  ┌───────────────────────────────────────────────────┐      │
+│  │              Supabase                             │      │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐          │      │
+│  │  │ Auth     │ │ Database │ │ Realtime │          │      │
+│  │  └──────────┘ └──────────┘ └──────────┘          │      │
+│  └───────────────────────────────────────────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+```
 
-Tampilan Daftar Motor (Read)
-Semua data motor yang sudah disimpan akan ditampilkan di halaman utama.
+---
 
-Penyimpanan Lokal (Local Storage)
-Data motor disimpan menggunakan `AsyncStorage`, sehingga tetap tersimpan meskipun aplikasi ditutup.
+## ✨ Fitur Utama
 
-Navigasi Antar Halaman
-Menggunakan Expo Router agar perpindahan antar halaman menjadi lebih mudah dan efisien.
+### 👤 Autentikasi Pengguna
+- **Register** - Pendaftaran akun baru dengan nama, email, dan nomor telepon
+- **Login** - Sistem autentikasi berbasis Supabase Auth
+- **Session Management** - Penyimpanan sesi menggunakan AsyncStorage
+- **Auto-refresh Token** - Token auth diperbarui secara otomatis
 
-Desain Bersih & Minimalis
-Tampilan dengan background putih dan teks rata tengah agar terlihat sederhana namun profesional.
+### 🏍️ Manajemen Motor (Admin)
+- **Tambah Motor** - Menambahkan data motor lengkap (nama, brand, kategori, CC, BBM, harga, stok)
+- **Edit Motor** - Memperbarui informasi motor yang ada
+- **Hapus Motor** - Menghapus motor dari inventori
+- **Real-time Inventory** - Stok motor otomatis ter-update saat transaksi
+- **Kategori Motor** - Filtering berdasarkan kategori (matic, sport, dll)
 
-Teknologi yang Digunakan
+### 📅 Sistem Booking
+- **Kalender Interaktif** - Pemilihan tanggal mulai dan akhir sewa
+- **Kalkulasi Durasi** - Otomatisasi hitung lama sewa (hari)
+- **Kalkulasi Harga** - Total harga = harga per hari × durasi
+- **Informasi Stok** - Menampilkan ketersediaan unit secara real-time
 
-| Teknologi                      | Deskripsi                                                        |
-| ------------------------------ | ---------------------------------------------------------------- |
-| ⚛️ **React Native (Expo)**     | Framework untuk membuat aplikasi mobile cross-platform.          |
-| 🧭 **Expo Router**             | Sistem navigasi berbasis file yang mudah digunakan.              |
-| 💾 **AsyncStorage**            | Media penyimpanan data lokal di perangkat.                       |
-| 💡 **TypeScript / JavaScript** | Bahasa pemrograman dengan dukungan tipe data aman dan fleksibel. |
-| 🎨 **React Native StyleSheet** | Untuk pengaturan tampilan dan styling komponen.                  |
+### 💳 Transaksi & Pembayaran
+- **Status Transaksi** - 5 status: pending → confirmed → ongoing → completed/cancelled
+- **Order Number** - Format unik: `ORD-{timestamp}-{random}`
+- **Riwayat Transaksi** - User dapat melihat semua transaksi mereka
+- **Filter Status** - Filter transaksi berdasarkan status
+- **Notifikasi Real-time** - Update status langsung tanpa refresh
 
-Tampilan Aplikasi (Preview)
+### 👨‍💼 Admin Panel
+- **Kelola Transaksi** - Update status transaksi (konfirmasi, mulai, selesaikan)
+- **Pengembalian Motor** - Sistem pencatatan motor yang dikembalikan
+- **Dashboard** - Overview semua transaksi
 
-Page Selamat Datang
+### 🔗 Deep Linking
+- **Share Links** - Bagikan link promo ke teman
+- **Promo Attribution** - Lacak referral dari deep link
+- **Direct Booking** - Klik link langsung ke halaman booking motor
 
-<img width="366" height="740" alt="Page Selamat Datang" src="https://github.com/user-attachments/assets/716969fa-cca3-4fb2-86d8-f6ecda073ea2" />
+---
 
+## 🔄 Alur Algoritma Aplikasi
 
-Page Fasilitas
+### 1. Alur Booking Motor
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   Home      │───▶│   Login     │───▶│  Pilih Motor│
+│   Screen    │    │   Required  │    │   (cek stok)│
+└─────────────┘    └─────────────┘    └──────┬──────┘
+                                             │
+                     ┌─────────────────────────┘
+                     ▼
+              ┌─────────────┐    ┌─────────────┐
+              │Pilih Tanggal│───▶│   Isi Data  │
+              │   Sewa      │    │   Diri      │
+              └──────┬──────┘    └──────┬──────┘
+                     │                  │
+                     ▼                  ▼
+              ┌─────────────┐    ┌─────────────┐
+              │Kalkulasi    │───▶│  Konfirmasi │
+              │Total Harga  │    │  Pesanan    │
+              └──────┬──────┘    └──────┬──────┘
+                     │                  │
+                     ▼                  ▼
+              ┌─────────────┐    ┌─────────────┐
+              │   Simpan    │◀───│   Bayar     │
+              │   Transaksi │    │   (Pending) │
+              └──────┬──────┘    └─────────────┘
+                     │
+                     ▼
+              ┌─────────────┐
+              │   Status    │
+              │  Updated    │
+              │ (Realtime)  │
+              └─────────────┘
+```
 
-<img width="366" height="739" alt="Page Fasilitas" src="https://github.com/user-attachments/assets/5e108ebd-211e-4963-8ff6-9bae6481395b" />
+### 2. Alur Status Transaksi
+```
+                    ┌─────────────────┐
+                    │     PENDING     │
+                    │  (Menunggu)     │
+                    └────────┬────────┘
+                             │
+                    ┌────────▼────────┐
+                    │    CONFIRMED    │◀──────────┐
+                    │  (Dikonfirmasi) │           │
+                    └────────┬────────┘           │
+                             │                    │
+                    ┌────────▼────────┐    ┌──────▼──────┐
+                    │    ONGOING      │    │  CANCELLED  │
+                    │  (Berlangsung)  │    │ (Dibatalkan)│
+                    └────────┬────────┘    └─────────────┘
+                             │
+                    ┌────────▼────────┐
+                    │   COMPLETED     │
+                    │    (Selesai)    │
+                    └─────────────────┘
+```
 
+### 3. Alur Update Stok Otomatis
+```
+┌─────────────────────────────────────────────────────────┐
+│              TRANSACTION STATUS CHANGE                  │
+├─────────────────────────────────────────────────────────┤
+│  pending ──confirmed  │  Stok -1 (motor disewa)        │
+│  ongoing ──completed  │  Stok +1 (motor dikembalikan)  │
+│  confirmed ─cancelled │  Stok +1 (pesanan dibatalkan)  │
+└─────────────────────────────────────────────────────────┘
+```
 
-Page Testimoni
+---
 
-<img width="362" height="725" alt="Page Testimoni" src="https://github.com/user-attachments/assets/048b8553-48e1-4c96-8bff-1c73f46ec4bf" />
+## 🛠️ Teknologi yang Digunakan
 
+| Teknologi | Deskripsi |
+|-----------|-----------|
+| ⚛️ **React Native (Expo)** | Framework untuk membuat aplikasi mobile cross-platform (iOS & Android) |
+| 🧭 **Expo Router** | Sistem navigasi berbasis file yang intuitif dan type-safe |
+| 🗄️ **Supabase** | Backend-as-a-Service dengan PostgreSQL, Auth, dan Realtime subscriptions |
+| 📦 **Zustand** | State management yang ringan dan sederhana |
+| 💾 **AsyncStorage** | Penyimpanan data lokal di perangkat |
+| 🔗 **Deep Linking** | Handle URL schemes untuk navigasi dan promo tracking |
+| 🎨 **TypeScript** | Bahasa pemrograman dengan tipe data yang aman |
+| 📱 **React Native StyleSheet** | Styling komponen dengan CSS-like syntax |
 
-Page Pengembalian Motor
+---
 
-<img width="360" height="739" alt="Page Pengembalian Motor" src="https://github.com/user-attachments/assets/5288aec7-0ce8-438a-aa20-492db820f39d" />
+## 📁 Struktur Proyek
 
+```
+RentBike/
+├── app/
+│   ├── (tabs)/              # Tab navigation screens
+│   │   ├── home.tsx         # Home screen - daftar motor
+│   │   ├── explore.tsx      # Explore - browse kategori
+│   │   └── profile.tsx      # User profile
+│   ├── booking/             # Booking flow
+│   │   ├── date.tsx         # Pilih tanggal sewa
+│   │   ├── detailbooking.tsx # Isi data & konfirmasi
+│   │   ├── confirmbooking.tsx # Konfirmasi akhir
+│   │   ├── payment.tsx      # Halaman pembayaran
+│   │   └── transaction.tsx  # Riwayat transaksi
+│   ├── user/                # Authentication
+│   │   ├── login.tsx        # Login screen
+│   │   ├── register.tsx     # Register screen
+│   │   └── verify.tsx       # OTP verification
+│   ├── admin/               # Admin features
+│   │   ├── ReturnMotor.tsx  # Pengembalian motor
+│   │   └── ReturnMotorScreen.tsx
+│   └── _layout.tsx          # Root layout
+├── store/                   # State management
+│   ├── useAuthStore.ts      # Auth state (user, login, logout)
+│   ├── useBikeStore.ts      # Bike state (CRUD, realtime)
+│   └── useTransactionStore.ts # Transaction state
+├── lib/                     # Utilities
+│   ├── supabase.ts          # Supabase client config
+│   ├── deeplink.ts          # Deep link handler
+│   └── shareLinks.ts        # Share functionality
+├── hooks/                   # Custom hooks
+│   └── useDeepLink.ts       # Deep link hook
+├── types/                   # TypeScript types
+│   ├── Bike.ts              # Bike interface
+│   └── deepLink.ts          # Deep link types
+└── constants/               # Constants
+    └── theme.ts             # Theme colors & styles
+```
 
-Page Daftar Motor
-
-<img width="361" height="732" alt="Page Daftar Motor TersediaPenyewaan" src="https://github.com/user-attachments/assets/ee9696a3-72e9-48ed-bf5c-2b8e8c4d0530" />
-
-
-Form Penyewaan Motor
-
-<img width="358" height="739" alt="Form Penyewaan Motor" src="https://github.com/user-attachments/assets/05a5b546-cad1-42ef-a056-4f108f8c1840" />
-
-
-Notifikasi Penyewaan Berhasil
-
-<img width="354" height="738" alt="Notifikasi Penyewaan Berhasil" src="https://github.com/user-attachments/assets/a6c129aa-9d07-467a-b4a3-e94725f559ec" />
-
-
-Page Admin Kelola Motor
-
-<img width="367" height="731" alt="Page Admin Kelola Motor" src="https://github.com/user-attachments/assets/37d18535-3a95-4031-8dc2-2bb4c0c6a6b7" />
-
-
-
-Form Menambahkan Motor
-
-<img width="376" height="736" alt="Form Menambahkan Motor" src="https://github.com/user-attachments/assets/0a51047c-610a-4200-a837-270373aaf2a5" />
-
-
-Form Edit Motor
-
-<img width="361" height="729" alt="Form Edit Motor" src="https://github.com/user-attachments/assets/1ceb32f7-5de0-4665-be23-adef8d6914eb" />
-
-
-Bukti Penyewaan Motor
-
-<img width="936" height="513" alt="Bukti Penyewaan Motor" src="https://github.com/user-attachments/assets/73682131-5a2f-4d7a-aa11-46572a5195e0" />
-
-
-
-
-
-
-
+---
 
 ## ⚙️ Cara Menjalankan Aplikasi
 
-1. Clone repository:
+### 1. Clone Repository
+```bash
+git clone https://github.com/tianarsamm/UTS_PemrogramanMobile.git
+cd RentRide
+```
 
-   ```bash
-   git clone https://github.com/tianarsamm/UTS_PemrogramanMobile.git
-   cd RentRide
-   ```
-2. Install dependencies:
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-   ```bash
-   npm install
-   ```
-3. Jalankan aplikasi:
+### 3. Setup Environment Variables
+Buat file `.env` di root project:
+```env
+EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+EXPO_PUBLIC_SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+```
 
-   ```bash
-   npx expo start
-   ```
-4. Scan QR Code menggunakan **Expo Go** di perangkat kamu.
+### 4. Jalankan Aplikasi
+```bash
+npx expo start
+```
 
+### 5. Scan QR Code
+Gunakan **Expo Go** di perangkat mobile (iOS/Android) untuk scan QR code.
 
+---
 
+## 📋 Database Schema (Supabase)
 
-LINK VIDEO LOOM:
-https://www.loom.com/share/147005d1d11c49c293f80a2855d663f3
+### Tabel: `users`
+| Kolom | Tipe | Deskripsi |
+|-------|------|-----------|
+| id | UUID | Primary key |
+| full_name | TEXT | Nama lengkap user |
+| email | TEXT | Email user |
+| phone | TEXT | Nomor telepon |
+| role | TEXT | Role ('user' atau 'admin') |
+| avatar_url | TEXT | URL foto profil |
+
+### Tabel: `bikes`
+| Kolom | Tipe | Deskripsi |
+|-------|------|-----------|
+| id | UUID | Primary key |
+| name | TEXT | Nama motor |
+| brand | TEXT | Brand motor (Honda, Yamaha, dll) |
+| category | TEXT | Kategori (matic, sport, bebek) |
+| fuel | TEXT | Tipe BBM |
+| cc | INTEGER | Kapasitas mesin (CC) |
+| price | INTEGER | Harga sewa per hari |
+| unit | INTEGER | Stok tersedia |
+| image_url | TEXT | URL gambar motor |
+| created_at | TIMESTAMP | Waktu dibuat |
+
+### Tabel: `transactions`
+| Kolom | Tipe | Deskripsi |
+|-------|------|-----------|
+| id | UUID | Primary key |
+| order_number | TEXT | Nomor pesanan unik |
+| user_id | UUID | Foreign key ke users |
+| bike_id | UUID | Foreign key ke bikes |
+| bike_name | TEXT | Nama motor (denormalized) |
+| bike_price | INTEGER | Harga per hari |
+| duration | INTEGER | Lama sewa (hari) |
+| start_date | DATE | Tanggal mulai |
+| end_date | DATE | Tanggal akhir |
+| total_price | INTEGER | Total harga |
+| status | TEXT | Status (pending/confirmed/ongoing/completed/cancelled) |
+| created_at | TIMESTAMP | Waktu dibuat |
+| updated_at | TIMESTAMP | Waktu diperbarui |
+
+---
+
+## 🔧 Konfigurasi Deep Link
+
+Deep link untuk aplikasi RentRide dapat dikonfigurasi di `app.json`:
+
+```json
+{
+  "expo": {
+    "scheme": "rentride",
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id"
+      }
+    }
+  }
+}
+```
+
+**Contoh Penggunaan Deep Link:**
+```
+rentride://booking?bikeId=xxx&promo=DISCONT20
+```
+
+---
+
+## 📝 Catatan Pengembangan
+
+- Aplikasi ini menggunakan **mock authentication** untuk development. Implementasi Supabase Auth dapat diaktifkan dengan membuka komentar di `store/useAuthStore.ts`
+- Untuk production, pastikan RLS (Row Level Security) di Supabase dikonfigurasi dengan benar
+- Stok motor di-update secara otomatis melalui Supabase Realtime subscriptions
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dikembangkan untuk keperluan tugas akhir mata kuliah Pemrograman Mobile.
 
