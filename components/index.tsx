@@ -1,12 +1,11 @@
-import { ScrollView, StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { Link } from "expo-router";
-import Navbar from "./../../components/navbar";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as Animatable from "react-native-animatable";
 
 export default function DashboardScreen() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
 
       {/* Animasi container utama */}
       <Animatable.View

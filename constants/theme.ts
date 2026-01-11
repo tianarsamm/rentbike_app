@@ -5,25 +5,29 @@
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+// 🎨 WARNA HIJAU CUSTOM
+const tintColorLight = '#16A34A';  // Hijau muda (aktif)
+const tintColorDark = '#16A34A';   // Hijau muda (aktif)
+
+const iconInactive = '#065F46';    // Hijau gelap (tidak aktif)
+const iconActive = '#16A34A';      // Hijau muda (aktif)
 
 export const Colors = {
   light: {
     text: '#11181C',
     background: '#fff',
     tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    icon: iconInactive,
+    tabIconDefault: iconInactive,      // 👈 Warna icon tidak aktif
+    tabIconSelected: iconActive,        // 👈 Warna icon aktif
   },
   dark: {
     text: '#ECEDEE',
     background: '#151718',
     tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    icon: iconInactive,
+    tabIconDefault: iconInactive,      // 👈 Warna icon tidak aktif
+    tabIconSelected: iconActive,        // 👈 Warna icon aktif
   },
 };
 

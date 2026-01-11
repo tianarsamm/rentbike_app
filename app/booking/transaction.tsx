@@ -1,68 +1,24 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
-import { supabase } from "../../lib/supabase";
 import { TransactionStatus, useTransactionStore } from "../../store/useTransactionStore";
 
 export default function UserTransactionsScreen() {
   const router = useRouter();
-  const { transactions, fetchUserTransactions } = useTransactionStore();
+  const { transactions } = useTransactionStore();
   const [refreshing, setRefreshing] = useState(false);
   const [filterStatus, setFilterStatus] = useState<TransactionStatus | 'all'>('all');
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
-  // Get current user and fetch transactions
-  useEffect(() => {
-    const initUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        console.log('👤 Current User ID:', user.id);
-        setCurrentUserId(user.id);
-        fetchUserTransactions(user.id);
-      }
-    };
-
-    initUser();
-  }, []);
-
-  // Setup realtime subscription
-  useEffect(() => {
-    if (!currentUserId) return;
-
-    console.log('🔔 Setting up subscription for user:', currentUserId);
-
-    const channel = supabase
-      .channel(`user-transactions-${currentUserId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'transactions',
-          filter: `user_id=eq.${currentUserId}`,
-        },
-        (payload) => {
-          console.log('🔔 Realtime update received:', payload);
-          fetchUserTransactions(currentUserId);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      console.log('🔕 Cleaning up subscription');
-      if (channel) {
-        supabase.removeChannel(channel);
-      }
-    };
-  }, [currentUserId]);
+  // Ambil user ID dari auth (sementara hardcode)
+  const currentUserId = "user-123";
 
   // Filter transaksi berdasarkan user dan status
   const userTransactions = transactions
@@ -70,13 +26,12 @@ export default function UserTransactionsScreen() {
     .filter((trx) => filterStatus === 'all' ? true : trx.status === filterStatus);
 
   const onRefresh = React.useCallback(() => {
-    if (!currentUserId) return;
-    
     setRefreshing(true);
-    fetchUserTransactions(currentUserId).finally(() => {
+    // Simulasi refresh
+    setTimeout(() => {
       setRefreshing(false);
-    });
-  }, [currentUserId]);
+    }, 1000);
+  }, []);
 
   const getStatusColor = (status: TransactionStatus) => {
     switch (status) {
@@ -359,34 +314,22 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#111827",
   },
-   filterContainer: {
-    flexGrow: 0,
-  paddingHorizontal: 12,
-  paddingVertical: 8,
-  backgroundColor: "#ffffffff",
-  // borderBottomWidth: 1,
-  // borderBottomColor: "#ffffffff",
-  marginTop: 10,
-},
+  filterContainer: {
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
   filterContent: {
     paddingHorizontal: 16,
     paddingVertical: 12,
     gap: 8,
-    height: 32,
-  alignItems: "center",
-  justifyContent: "center",
   },
   filterChip: {
-  paddingHorizontal: 12,
-  paddingVertical: 6,
-  borderRadius: 20,
-  borderWidth: 0.5,
-  borderColor: "black",
-  height: 32,
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#F3F4F6",
-  marginRight: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: "#F3F4F6",
+    marginRight: 8,
   },
   filterChipActive: {
     backgroundColor: "#16A34A",
